@@ -38,6 +38,7 @@ public class ApplicationStartedEventListener implements GenericApplicationListen
 
             ConfigurableEnvironment envi = ((ApplicationEnvironmentPreparedEvent) event).getEnvironment();
 
+            // 建议debug查看当前springboot版本获取到的配置文件信息
             PropertySource<?> propertySource = envi.getPropertySources().get("Config resource 'class path resource [config/application.properties]' via location 'optional:classpath:/config/'");
 
             if (propertySource != null && propertySource.containsProperty("my.logging.path")) {
