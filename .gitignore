@@ -1,0 +1,12 @@
+*.iml
+.idea
+target
+.DS_Store
+.settings
+.project
+.classpath
+logs
+*.log
+*.bak
+.gitignore
+

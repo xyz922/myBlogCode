@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <Properties>
+        <property name="CONSOLE_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %highlight{%-5level} %logger{36} - %msg%n"/>
+        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <property name="FILE_PATH" value="${ctx:LOG_PATH}"/>
+        <property name="FILE_NAME" value="myBlogCode"/>
+        <property name="LOG_LEVEL" value="${ctx:LOG_LEVEL}"/>
+    </Properties>
+
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <!--  日志输出配置 file文件方式   immediateFlush="false"防止一次性写入大量日志降低性能-->
+        <RollingFile name="RollingFileInfo" fileName="${FILE_PATH}/${FILE_NAME}.log"
+                     filePattern="${FILE_PATH}/%d{yyyy-MM-dd}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+                     immediateFlush="false">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+
+            <!-- 记录日志级别-->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <!--    日志文件达到y阈值开始滚动    -->
+                <SizeBasedTriggeringPolicy size="500MB"/>
+            </Policies>
+            <!-- 同一文件夹最多多少 开始覆盖 默认7 这这里设置30-->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+
+        <!-- 日志输出配置 file文件方式-->
+        <RollingFile name="ERROR" fileName="${FILE_PATH}/${FILE_NAME}_error.log"
+                     filePattern="${FILE_PATH}/%d{yyyy-MM-dd}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+                     immediateFlush="false">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+
+            <!-- 记录日志级别-->
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是24 hour-->
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <!--    日志文件达到y阈值开始滚动    -->
+                <SizeBasedTriggeringPolicy size="500MB"/>
+            </Policies>
+            <!-- 同一文件夹最多多少 开始覆盖 默认7 这这里设置30-->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+    </appenders>
+
+
+    <loggers>
+
+        <!--  异步日志  -->
+        <AsyncLogger level="${LOG_LEVEL}" name="org" includeLocation="false" additivity="true" >
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="ERROR"/>
+        </AsyncLogger>
+
+        <AsyncLogger level="${LOG_LEVEL}" name="com" includeLocation="false" additivity="true">
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="ERROR"/>
+        </AsyncLogger>
+
+        <AsyncLogger level="${LOG_LEVEL}" name="cn" includeLocation="false" additivity="true">
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="ERROR"/>
+        </AsyncLogger>
+
+        <root  includeLocation="false">
+            <appender-ref ref="Console"/>
+            <!--混合模式请解除下列2行注释            -->
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="ERROR"/>
+        </root>
+
+    </loggers>
+</configuration>
