@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * @author: xuyuzhen
+ * @author: gem.xu
  * @date: 2022/11/6
  */
 @SpringBootApplication
